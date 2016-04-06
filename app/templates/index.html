@@ -1,0 +1,24 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div><a href="./upload"><button>Добавить файл</button></a></div>
+
+<!-- Контейнер с адаптиными блоками -->
+
+<div class="masonry">
+
+<!-- Адаптивные блоки с содержанием -->
+
+{% for key in data %}
+<div class="item">
+<img src="{{ url_for('static', filename='pictures/{0}'.format(data[key][0]))}}" onclick="openPic(this);">
+<br>{{data[key][1]}}
+</div>
+{% endfor %}
+
+<!-- Конец адаптивных блоков с содержанием -->
+ 
+</div>
+    <!-- Конец контейнера с адаптивными блоками -->
+{% endblock %}

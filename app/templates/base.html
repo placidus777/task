@@ -1,0 +1,14 @@
+﻿<html>
+<head>
+
+<title>{{title}}</title>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css')}}" />
+<script src="{{ url_for('static', filename='scripts/main.js')}}"></script>
+</head>
+<body>
+
+{% block content %}{% endblock %}
+<div id="fullsize" onclick="hidePic();"><img src="" style="	border: solid thick black;" /></div>
+</body>
+<html>
