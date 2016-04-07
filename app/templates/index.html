@@ -10,10 +10,10 @@
 
 <!-- Адаптивные блоки с содержанием -->
 
-{% for key in data %}
+{% for item in data %}
 <div class="item">
-<img src="{{ url_for('static', filename='pictures/{0}'.format(data[key][0]))}}" onclick="openPic(this);">
-<br>{{data[key][1]}}
+<img src="{{ url_for('static', filename='pictures/{0}'.format(item[0]))}}" onclick="openPic(this);">
+<br>{{item[1]}}
 </div>
 {% endfor %}
 

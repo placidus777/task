@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 import uuid
 import shelve
+import sqlite3
 
 exts1=['png', 'jpg', 'jpeg', 'gif']
 exts2=[x.upper() for x in exts1]
@@ -17,24 +18,26 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-def saveData(flid,flname,comm):
-    with shelve.open('./app/dbfile') as db:
-        data = db.get('data')
-        data[flid]=flname,comm
-        db['data']=data
+def saveData(flname,comment):
+    db = sqlite3.connect('./app/dbase.db')
+    cur = db.cursor()
+    cur.execute('insert into main (filename,comment) values(?,?);',(flname,comment))
+    cur.close()
+    db.commit()
+    db.close()
 
 def getData():
-    with shelve.open('./app/dbfile') as db:
-        data = db.get('data')
-        if data:
-            return data
-        else:
-            return {}
+    db = sqlite3.connect('./app/dbase.db')
+    cur = db.cursor()
+    cur.execute('select filename,comment from main;')
+    rezz = cur.fetchall()
+    cur.close()
+    db.close()
+    return rezz
 
 @app.route('/')
 @app.route('/index')
 def index():
-    #data = os.listdir(os.getcwd()+'/app/static/pictures')
     data = getData()
     return render_template('index.html',title="Отображение файлов",data=data)
 
@@ -48,6 +51,6 @@ def upload_file():
             flid = uuid.uuid4().hex
             filename = flid +'.'+file.filename.split('.')[-1]
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            saveData(flid,filename,comment)
+            saveData(filename,comment)
             return redirect(url_for('index'))
     return render_template('form.html',title="Форма ввода")
