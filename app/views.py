@@ -4,7 +4,6 @@ from app import app
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 import uuid
-import shelve
 import sqlite3
 
 exts1=['png', 'jpg', 'jpeg', 'gif']
